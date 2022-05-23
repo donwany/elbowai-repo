@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: my-app
+          image: wordpress:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - name: http
+      targetPort: 80
+      port: 80
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    #kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    #cert-manager.io/cluster-issuer: letsencrypt-production
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+    - host: wordpress.aerogramme.io
+      http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: my-service
+                port:
+                  number: 80
+            pathType: Prefix
+#  tls:
+#    - hosts:
+#      - wordpress.aerogramme.io
+#      secretName: acme-crt-secret
+#  tls:
+#    - hosts:
+#        - api.v1.aerogramme.io
+#        - api.v2.aerogramme.io
+#      secretName: video-app-secret
