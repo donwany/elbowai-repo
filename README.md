@@ -32,7 +32,7 @@ kubectl describe ingress \
 --selector=acme.cert-manager.io/http01-solver=true
 
 k describe ing cm-acme-http-solver-lcr76
-curl http://wordpress.aerogramme.io/.well-known/acme-challenge/jT5uo4g5qJubxNSc9cRVYPbyN4ggcTG1XDeyovaQoGw
+curl http://wordpress.aerogramme.io/.well-known/acme-challenge/jT5uo4g5qJubxNSc9
 
 helm --namespace cert-manager delete cert-manager
 kubectl delete namespace cert-manager
