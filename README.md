@@ -1,15 +1,17 @@
+### https://2021-03-lke.container.training/#180
+
 ### install cert-manager
 ```shell
-helm repo add jetstack https://charts.jetstack.io
+kubectl create ns nginx-v2
 
+helm repo add jetstack https://charts.jetstack.io
 helm repo add nginx-stable https://helm.nginx.com/stable
 helm install nginx-ingress  nginx-stable/nginx-ingress
 
-helm repo add traefik https://helm.traefik.io/traefik
-kubectl create ns traefik-v2
-
-# Install in the namespace "traefik-v2"
-helm install --namespace=traefik-v2 traefik traefik/traefik
+#helm repo add traefik https://helm.traefik.io/traefik
+#kubectl create ns nginx-v2
+#Install in the namespace "traefik-v2"
+#helm install --namespace=traefik-v2 traefik traefik/traefik
 
 helm repo update
 
@@ -29,7 +31,8 @@ kubectl get pods,services,ingresses \
 kubectl describe ingress \
 --selector=acme.cert-manager.io/http01-solver=true
 
-curl wordpress.aerogramme.io/.well-known/acme-challenge/jT5uo4g5qJubxNSc9cRVYPbyN4ggcTG1XDeyovaQoGw
+k describe ing cm-acme-http-solver-lcr76
+curl http://wordpress.aerogramme.io/.well-known/acme-challenge/jT5uo4g5qJubxNSc9cRVYPbyN4ggcTG1XDeyovaQoGw
 
 helm --namespace cert-manager delete cert-manager
 kubectl delete namespace cert-manager
@@ -45,7 +48,6 @@ sudo mv kubectl-cert_manager /usr/local/bin
 kubectl cert-manager check api
 
 ```
-
 ### Create Secret
 ```shell
 # Create keys and cert
@@ -72,4 +74,4 @@ kubectl create secret tls wordpress-app-secret \
 --namespace wordpress \
 --key tls.key \
 --cert tls.crt
-```# elboai-repo
+```

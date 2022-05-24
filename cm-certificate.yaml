@@ -1,11 +1,11 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: acme-crt-secret
+  name: demo.aerogramme.io
 spec:
-  secretName: acme-crt-secret
+  secretName: demo.aerogramme.io
   dnsNames:
-    - wordpress.aerogramme.io
+    - demo.aerogramme.io
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
