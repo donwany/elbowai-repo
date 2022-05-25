@@ -37,12 +37,18 @@ metadata:
   name: my-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
-    #kubernetes.io/tls-acme: "true"
     #cert-manager.io/cluster-issuer: letsencrypt-staging
     cert-manager.io/cluster-issuer: letsencrypt-production
     nginx.ingress.kubernetes.io/rewrite-target: /
-    #nginx.ingress.kubernetes.io/app-root: "/"
-    #nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # prevent the controller from redirecting (308) to HTTPS
+    #nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    # type of authentication
+    #nginx.ingress.kubernetes.io/auth-type: basic
+    # name of the secret that contains the user/password definitions
+    #nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    # message to display with an appropriate context why the authentication is required
+    #nginx.ingress.kubernetes.io/auth-realm: "Authentication Required - OK"
+
 spec:
   rules:
     - host: demo.aerogramme.io

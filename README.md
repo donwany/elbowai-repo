@@ -36,8 +36,21 @@ curl http://wordpress.aerogramme.io/.well-known/acme-challenge/jT5uo4g5qJubxNSc9
 
 helm --namespace cert-manager delete cert-manager
 kubectl delete namespace cert-manager
-```
 
+# USING BASIC AUTHENTICATION
+curl -v http://<PUBLIC-IP-ADDRESS>/ -H 'demo.aerogramme.io/api/v1'
+curl -v http://<PUBLIC-IP-ADDRESS>/ -H 'Host: demo.aerogramme.io/api/v1' -u 'venkat:hello'
+
+# https://8gwifi.org/htpasswd.jsp
+# https://kubernetes.github.io/ingress-nginx/examples/auth/basic/
+# username:password
+# world:boss => world:$apr1$t5KzFiKp$NdaO/yl6IFDcVnE6/m06T.
+echo -n "world:$apr1$t5KzFiKp$NdaO/yl6IFDcVnE6/m06T." | base64
+
+USER=<USERNAME_HERE>; PASSWORD=<PASSWORD_HERE>; 
+echo "${USER}:$(openssl passwd -stdin -apr1 <<< ${PASSWORD})" >> auth
+kubectl create secret generic basic-auth --from-file=auth
+```
 ### Check Cert-manager plugin
 ```shell
 curl -L -o kubectl-cert-manager.tar.gz \
